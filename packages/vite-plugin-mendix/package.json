@@ -1,0 +1,35 @@
+{
+  "name": "@engalar/vite-plugin-mendix",
+  "version": "1.0.0",
+  "dependencies": {
+    "http-proxy": "^1.18.1"
+  },
+  "devDependencies": {
+    "@types/http-proxy": "^1.17.14"
+  },
+  "files": [
+    "dist",
+    "main.ts",
+    "dummy.js"
+  ],
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.cjs"
+    }
+  },
+  "scripts": {
+    "dev": "unbuild --stub",
+    "build": "unbuild",
+    "prepublishOnly": "npm run build"
+  },
+  "engines": {
+    "node": "^14.18.0 || >=16.0.0"
+  },
+  "peerDependencies": {
+    "vite": "^4.2.0 || ^5.0.0"
+  }
+}
