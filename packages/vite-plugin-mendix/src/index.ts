@@ -12,10 +12,21 @@ const prefixs = [
   "/@react-refresh",
 ];
 
-export default function (): PluginOption {
+interface Options {
+  widgetName: string;
+}
+
+export default function (opts: Options): PluginOption {
   return {
     name: "vite-plugin-mendix",
     enforce: "pre",
+    load(id, options) {
+      if (id.startsWith("/src/main.js")) {
+        return fs.readFileSync(currentDir + "/../main.js", {
+          encoding: "utf-8",
+        }).replace("__WIDGET_NAME__", opts.widgetName);
+      }
+    },
     configureServer(server) {
       server.middlewares.use(async (req, res, next) => {
         const url = req.url!;
@@ -27,10 +38,6 @@ export default function (): PluginOption {
         }
         if (url.startsWith("/mxclientsystem/mxui/mxui.js")) {
           serveFile(req, res, "dummy.js");
-          return;
-        }
-        if (url.startsWith("/main.js")) {
-          serveFile(req, res, "main.js");
           return;
         }
         if (url.startsWith("/mxui.js")) {

@@ -9,7 +9,7 @@
   },
   "files": [
     "dist",
-    "main.ts",
+    "main.js",
     "dummy.js"
   ],
   "main": "./dist/index.cjs",

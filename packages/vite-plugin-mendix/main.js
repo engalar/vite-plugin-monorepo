@@ -30,7 +30,7 @@ Object.defineProperty(window, "mx", {
 
 async function main() {
     await loadScript("mxui.js");
-    await loadWidget("AddressFinder");
+    await loadWidget("__WIDGET_NAME__");
     mx._startup();
 }
 main();

@@ -6,7 +6,7 @@ async function main() {
     window.$RefreshSig$ = () => type => type;
     window.__vite_plugin_react_preamble_installed__ = true;
 
-    await import("/main.js");
+    await import("/src/main.js");
 }
 
 main();
