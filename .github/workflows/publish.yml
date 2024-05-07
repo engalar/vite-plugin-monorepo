@@ -35,4 +35,4 @@ jobs:
 
       - uses: ArnaudBarre/github-release@v1
         with:
-          path: packages/plugin-react/CHANGELOG.md
+          path: packages/vite-plugin-mendix/CHANGELOG.md

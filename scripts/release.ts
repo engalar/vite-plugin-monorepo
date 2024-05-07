@@ -3,8 +3,8 @@ import colors from "picocolors";
 import { logRecentCommits, run } from "./releaseUtils";
 
 release({
-  repo: "vite-plugin-vue",
-  packages: ["plugin-vue", "plugin-vue-jsx"],
+  repo: "vite-plugin-monorepo",
+  packages: ["vite-plugin-mendix"],
   toTag: (pkg, version) => `${pkg}@${version}`,
   logChangelog: (pkg) => logRecentCommits(pkg),
   generateChangelog: async (pkgName) => {

@@ -1,6 +1,6 @@
 {
   "name": "@engalar/vite-plugin-mendix",
-  "version": "1.0.1",
+  "version": "1.0.4",
   "dependencies": {
     "http-proxy": "^1.18.1"
   },
@@ -10,7 +10,8 @@
   "files": [
     "dist",
     "main.js",
-    "dummy.js"
+    "dummy.js",
+    "mxui.js"
   ],
   "main": "./dist/index.cjs",
   "module": "./dist/index.mjs",
