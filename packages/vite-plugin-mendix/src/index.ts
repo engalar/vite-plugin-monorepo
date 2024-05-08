@@ -1,4 +1,4 @@
-import { Connect, PluginOption } from 'vite'
+import { Connect, PluginOption, createLogger } from 'vite'
 import fs, { FSWatcher } from 'fs'
 import react from '@vitejs/plugin-react'
 import Inspect from 'vite-plugin-inspect'
@@ -26,6 +26,8 @@ interface Options {
   testProject: string
   widgetPackage: string
 }
+
+const logger = createLogger()
 
 export default function (opts: Options): PluginOption {
   let watcher: FSWatcher | undefined = undefined
@@ -66,6 +68,9 @@ export default function (opts: Options): PluginOption {
         })
       },
       buildStart() {
+        logger.info(
+          `[vite-plugin-mendix] please start the test project in ${opts.testProject} and view app in http://localhost:5173/`,
+        )
         const sourceDir = path.join(process.cwd(), 'src')
         function throttle(func: () => Promise<void>): () => void {
           let lastScheduledTask: any = null,
@@ -95,6 +100,9 @@ export default function (opts: Options): PluginOption {
             }),
             sourceDir,
           )
+          logger.info(
+            `[vite-plugin-mendix] Typing updated: /typings/${opts.widgetName}Props.d.ts`,
+          )
           const xmlName = opts.widgetName + '.xml'
           await updateZip(
             path.join(sourceDir, xmlName),
@@ -104,6 +112,13 @@ export default function (opts: Options): PluginOption {
               `${opts.widgetPackage}.${opts.widgetName}.mpk`,
             ),
             xmlName,
+          )
+          // info update what mpk file in where test project has been updated
+          logger.info(
+            `[vite-plugin-mendix] MPK updated: ${opts.testProject}/widgets/${opts.widgetPackage}.${opts.widgetName}.mpk`,
+          )
+          logger.warn(
+            '[vite-plugin-mendix] Please run f4 to reload the test project in Studio Pro',
           )
         }
         const throttledGenerateTypes = throttle(generateTypes)
