@@ -1,9 +1,10 @@
 import { Connect, PluginOption } from 'vite'
-import fs from 'fs'
+import fs, { FSWatcher } from 'fs'
 import react from '@vitejs/plugin-react'
 import Inspect from 'vite-plugin-inspect'
+import { transformPackage } from '@mendix/pluggable-widgets-tools/dist/typings-generator'
 import httpProxy from 'http-proxy'
-import path from 'path'
+import path, { join } from 'path'
 import { fileURLToPath } from 'url'
 
 import type { ServerResponse } from 'http'
@@ -24,6 +25,7 @@ interface Options {
 }
 
 export default function (opts: Options): PluginOption {
+  let watcher: FSWatcher | undefined = undefined
   return [
     Inspect(),
     react(),
@@ -60,11 +62,51 @@ export default function (opts: Options): PluginOption {
           proxyRequest(req, res, url)
         })
       },
-      buildStart(opts) {
-        console.log('buildStart')
+      buildStart() {
+        const sourceDir = path.join(process.cwd(), 'src')
+        function throttle(func: () => Promise<void>): () => void {
+          let lastScheduledTask: any = null,
+            pending = false
+
+          return function () {
+            // @ts-ignore
+            const context: any = this
+
+            // not start and has todo, then cancel
+            if (!pending && lastScheduledTask !== null) {
+              clearTimeout(lastScheduledTask)
+            }
+
+            lastScheduledTask = setTimeout(async () => {
+              pending = true
+              lastScheduledTask = null
+              await func.apply(context)
+              pending = false
+            }, 300)
+          }
+        }
+        async function generateTypes() {
+          await transformPackage(
+            await fs.promises.readFile(path.join(sourceDir, 'package.xml'), {
+              encoding: 'utf8',
+            }),
+            sourceDir,
+          )
+        }
+        const throttledGenerateTypes = throttle(generateTypes)
+        watcher = fs.watch(
+          join(sourceDir, opts.widgetName + '.xml'),
+          (event: string, _filename) => {
+            if (event === 'change') {
+              throttledGenerateTypes()
+            }
+          },
+        )
       },
       buildEnd() {
-        console.log('buildEnd')
+        if (watcher) {
+          watcher.close()
+        }
       },
     },
   ]
