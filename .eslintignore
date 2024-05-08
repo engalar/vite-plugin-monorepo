@@ -5,3 +5,4 @@ mxui.js
 dummy.js
 main.js
 packages/vite-plugin-mendix/src/index.ts
+packages/vite-plugin-mendix/src/updateZip.ts

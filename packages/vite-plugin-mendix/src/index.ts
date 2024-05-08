@@ -8,6 +8,7 @@ import path, { join } from 'path'
 import { fileURLToPath } from 'url'
 
 import type { ServerResponse } from 'http'
+import { updateZip } from './updateZip'
 
 const __filename = fileURLToPath(import.meta.url)
 const currentDir = path.dirname(__filename)
@@ -22,6 +23,8 @@ const prefixs = [
 
 interface Options {
   widgetName: string
+  testProject: string
+  widgetPackage: string
 }
 
 export default function (opts: Options): PluginOption {
@@ -91,6 +94,16 @@ export default function (opts: Options): PluginOption {
               encoding: 'utf8',
             }),
             sourceDir,
+          )
+          const xmlName = opts.widgetName + '.xml'
+          await updateZip(
+            path.join(sourceDir, xmlName),
+            path.join(
+              opts.testProject,
+              'widgets',
+              `${opts.widgetPackage}.${opts.widgetName}.mpk`,
+            ),
+            xmlName,
           )
         }
         const throttledGenerateTypes = throttle(generateTypes)
