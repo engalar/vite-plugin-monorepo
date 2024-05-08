@@ -37,6 +37,21 @@ export default function (opts: Options): PluginOption {
     {
       name: 'vite-plugin-mendix',
       enforce: 'pre',
+      config(config) {
+        // TODO: refactor other proxy by this?
+        config.server = config.server || {}
+        config.server.proxy = config.server.proxy || {}
+        config.server.proxy = {
+          ...config.server.proxy,
+          ...{
+            '/mxdevtools/': {
+              ws: true,
+              target: 'ws://localhost:8080',
+            },
+          },
+        }
+        return config
+      },
       load(id, options) {
         if (id.startsWith('/src/main.js')) {
           return fs
