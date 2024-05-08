@@ -25,7 +25,7 @@
     "test-build": "VITE_TEST_BUILD=1 vitest run -c playground/vitest.config.e2e.ts",
     "debug-serve": "VITE_DEBUG_SERVE=1 vitest run -c playground/vitest.config.e2e.ts",
     "debug-build": "VITE_TEST_BUILD=1 VITE_PRESERVE_BUILD_ARTIFACTS=1 vitest run -c playground/vitest.config.e2e.ts",
-    "build": "pnpm -r --filter='./packages/*' run build",
+    "build": "pnpm -r --filter=\"@engalar/vite-plugin-mendix\" build",
     "dev": "pnpm -r --parallel --filter='./packages/*' run dev",
     "release": "tsx scripts/release.ts",
     "ci-publish": "tsx scripts/publishCI.ts"
@@ -43,6 +43,7 @@
     "eslint-define-config": "^2.0.0",
     "eslint-plugin-import": "^2.29.0",
     "eslint-plugin-node": "^11.1.0",
+    "eslint-plugin-n": "^14.0.0",
     "eslint-plugin-regexp": "^2.1.2",
     "conventional-changelog-cli": "^4.1.0",
     "fs-extra": "^11.2.0",

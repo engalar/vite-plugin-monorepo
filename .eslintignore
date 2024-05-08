@@ -1,3 +1,7 @@
 dist
 playground-temp
 temp
+mxui.js
+dummy.js
+main.js
+packages/vite-plugin-mendix/src/index.ts
