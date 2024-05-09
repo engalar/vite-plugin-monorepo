@@ -8,6 +8,7 @@ import { fileURLToPath } from 'url'
 
 import type { ServerResponse } from 'http'
 import { updateZip } from './updateZip'
+import { babelPluginPatchMxui } from './babel-plugin/patch-mxui'
 
 const __filename = fileURLToPath(import.meta.url)
 const currentDir = path.dirname(__filename)
@@ -32,7 +33,7 @@ export default function (opts: Options): PluginOption {
       enforce: 'pre',
       config(config) {
         config.server = config.server || {}
-        // config.server.open = '/test/index.html'
+        config.server.open = '/test/index.html'
         config.server.proxy = config.server.proxy || {}
         config.server.proxy = {
           ...config.server.proxy,
@@ -60,7 +61,15 @@ export default function (opts: Options): PluginOption {
             .replace('__WIDGET_NAME__', opts.widgetName)
         }
       },
-      configureServer(server) {
+      async configureServer(server) {
+        const response = await fetch(
+          'http://localhost:8080/mxclientsystem/mxui/mxui.js',
+        )
+        if (!response.ok) {
+          throw new Error('Network response was not ok')
+        }
+        const bodyText = await response.text()
+        const patchedMxuiString = await babelPluginPatchMxui(bodyText)
         server.middlewares.use(async (req, res, next) => {
           const url = req.url
           if (url?.startsWith('/test/mxclientsystem/mxui/mxui.js')) {
@@ -69,6 +78,9 @@ export default function (opts: Options): PluginOption {
           }
           if (url?.startsWith('/test/mxui.js')) {
             serveFile(req, res, 'mxui.js')
+            res.setHeader('Content-Type', 'text/javascript')
+            res.statusCode = 200
+            res.end(patchedMxuiString)
             return
           }
           // url not end with .html, redirect to /test/index.html
