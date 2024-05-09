@@ -77,7 +77,6 @@ export default function (opts: Options): PluginOption {
             return
           }
           if (url?.startsWith('/test/mxui.js')) {
-            serveFile(req, res, 'mxui.js')
             res.setHeader('Content-Type', 'text/javascript')
             res.statusCode = 200
             res.end(patchedMxuiString)

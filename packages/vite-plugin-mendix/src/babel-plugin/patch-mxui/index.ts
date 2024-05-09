@@ -6,8 +6,7 @@ import type Babel from '@babel/core'
 
 // https://astexplorer.net/#/KJ8AjD6maa
 function patchMxui(babel: typeof Babel): PluginObj {
-  const t = babel.types,
-    noNewArrows = true
+  const t = babel.types
 
   return {
     name: 'transform-arrow-functions',
