@@ -31,7 +31,6 @@ export default function (opts: Options): PluginOption {
       name: 'vite-plugin-mendix',
       enforce: 'pre',
       config(config) {
-        // TODO: refactor other proxy by this?
         config.server = config.server || {}
         // config.server.open = '/test/index.html'
         config.server.proxy = config.server.proxy || {}
@@ -42,14 +41,6 @@ export default function (opts: Options): PluginOption {
               target: 'http://localhost:8080',
               changeOrigin: true,
               rewrite: (path) => path.replace(/^\/test/, ''),
-              bypass(req, res, options) {
-                const url = req.url
-                if (url?.startsWith('/test/mxclientsystem/mxui/mxui.js')) {
-                  console.log('bypass', url, 'to', '/dummy.js')
-                  req.url = '/dummy.js'
-                  return 'http://localhost:5173/dummy.js'
-                }
-              },
             },
             '/test/mxdevtools/': {
               ws: true,
@@ -73,12 +64,10 @@ export default function (opts: Options): PluginOption {
         server.middlewares.use(async (req, res, next) => {
           const url = req.url
           if (url?.startsWith('/test/mxclientsystem/mxui/mxui.js')) {
-            console.log('serveFile url', url)
             serveFile(req, res, 'dummy.js')
             return
           }
           if (url?.startsWith('/test/mxui.js')) {
-            console.log('serveFile url', url)
             serveFile(req, res, 'mxui.js')
             return
           }
@@ -95,8 +84,6 @@ export default function (opts: Options): PluginOption {
             res.end()
             return
           }
-
-          console.log('next url', url)
           next()
         })
       },
