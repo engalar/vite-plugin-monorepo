@@ -3,7 +3,6 @@ import fs, { FSWatcher } from 'fs'
 import react from '@vitejs/plugin-react'
 import Inspect from 'vite-plugin-inspect'
 import { transformPackage } from '@mendix/pluggable-widgets-tools/dist/typings-generator'
-import httpProxy from 'http-proxy'
 import path, { join } from 'path'
 import { fileURLToPath } from 'url'
 
@@ -12,14 +11,6 @@ import { updateZip } from './updateZip'
 
 const __filename = fileURLToPath(import.meta.url)
 const currentDir = path.dirname(__filename)
-const proxy = httpProxy.createProxyServer({ secure: false })
-const prefixs = [
-  '/__inspect',
-  '/@vite',
-  '/node_modules',
-  '/src',
-  '/@react-refresh',
-]
 
 interface Options {
   widgetName: string
@@ -34,19 +25,36 @@ export default function (opts: Options): PluginOption {
   return [
     Inspect(),
     react(),
+    // https://vitejs.dev/config/server-options#server-proxy
+    // https://webpack.js.org/configuration/dev-server/#devserverproxy
     {
       name: 'vite-plugin-mendix',
       enforce: 'pre',
       config(config) {
         // TODO: refactor other proxy by this?
         config.server = config.server || {}
+        // config.server.open = '/test/index.html'
         config.server.proxy = config.server.proxy || {}
         config.server.proxy = {
           ...config.server.proxy,
           ...{
-            '/mxdevtools/': {
+            '/test': {
+              target: 'http://localhost:8080',
+              changeOrigin: true,
+              rewrite: (path) => path.replace(/^\/test/, ''),
+              bypass(req, res, options) {
+                const url = req.url
+                if (url?.startsWith('/test/mxclientsystem/mxui/mxui.js')) {
+                  console.log('bypass', url, 'to', '/dummy.js')
+                  req.url = '/dummy.js'
+                  return 'http://localhost:5173/dummy.js'
+                }
+              },
+            },
+            '/test/mxdevtools/': {
               ws: true,
               target: 'ws://localhost:8080',
+              rewrite: (path) => path.replace(/^\/test/, ''),
             },
           },
         }
@@ -63,23 +71,33 @@ export default function (opts: Options): PluginOption {
       },
       configureServer(server) {
         server.middlewares.use(async (req, res, next) => {
-          const url = req.url!
-          for (const prefix of prefixs) {
-            if (url.startsWith(prefix)) {
-              next()
-              return
-            }
-          }
-          if (url.startsWith('/mxclientsystem/mxui/mxui.js')) {
+          const url = req.url
+          if (url?.startsWith('/test/mxclientsystem/mxui/mxui.js')) {
+            console.log('serveFile url', url)
             serveFile(req, res, 'dummy.js')
             return
           }
-          if (url.startsWith('/mxui.js')) {
+          if (url?.startsWith('/test/mxui.js')) {
+            console.log('serveFile url', url)
             serveFile(req, res, 'mxui.js')
             return
           }
+          // url not end with .html, redirect to /test/index.html
+          if (
+            !url?.endsWith('.html') &&
+            url?.startsWith('/test') &&
+            req.headers.accept?.includes('text/html')
+          ) {
+            // redirect to /test/index.html
+            res.writeHead(302, {
+              Location: '/test/index.html',
+            })
+            res.end()
+            return
+          }
 
-          proxyRequest(req, res, url)
+          console.log('next url', url)
+          next()
         })
       },
       buildStart() {
@@ -155,21 +173,6 @@ export default function (opts: Options): PluginOption {
   ]
 }
 
-function proxyRequest(
-  req: Connect.IncomingMessage,
-  res: ServerResponse,
-  targetUrl: string,
-): void {
-  req.url = targetUrl
-  proxy.web(req, res, {
-    changeOrigin: true,
-    target: 'http://localhost:8080',
-  })
-  proxy.on('error', (err) => {
-    res.statusCode = 500
-    res.end(err.message)
-  })
-}
 function serveFile(
   req: Connect.IncomingMessage,
   res: ServerResponse,

@@ -4,12 +4,9 @@
   "dependencies": {
     "@vitejs/plugin-react": "^4.2.1",
     "vite-plugin-inspect": "^0.8.4",
-    "adm-zip": "^0.5.12",
-    "http-proxy": "^1.18.1"
+    "adm-zip": "^0.5.12"
   },
-  "devDependencies": {
-    "@types/http-proxy": "^1.17.14"
-  },
+  "devDependencies": {},
   "files": [
     "dist",
     "main.js",
