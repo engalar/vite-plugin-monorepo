@@ -131,39 +131,6 @@ module.exports = defineConfig({
       },
     },
     {
-      files: ['playground/**'],
-      rules: {
-        'n/no-extraneous-import': 'off',
-        'n/no-extraneous-require': 'off',
-        'n/no-missing-import': 'off',
-        'n/no-missing-require': 'off',
-        // engine field doesn't exist in playgrounds
-        'n/no-unsupported-features/es-builtins': [
-          'error',
-          {
-            version: '^18.0.0 || >=20.0.0',
-          },
-        ],
-        'n/no-unsupported-features/node-builtins': [
-          'error',
-          {
-            version: '^18.0.0 || >=20.0.0',
-          },
-        ],
-        '@typescript-eslint/explicit-module-boundary-types': 'off',
-      },
-    },
-    {
-      files: ['playground/**'],
-      excludedFiles: '**/__tests__/**',
-      rules: {
-        'no-undef': 'off',
-        'no-empty': 'off',
-        'no-constant-condition': 'off',
-        '@typescript-eslint/no-empty-function': 'off',
-      },
-    },
-    {
       files: ['*.js', '*.mjs', '*.cjs'],
       rules: {
         '@typescript-eslint/explicit-module-boundary-types': 'off',

@@ -19,12 +19,8 @@
     "postinstall": "simple-git-hooks",
     "format": "prettier --write --cache .",
     "lint": "eslint --cache .",
-    "typecheck": "tsc -p scripts && tsc -p playground && tsc -p packages/plugin-react",
+    "typecheck": "tsc -p scripts && tsc -p packages/vite-plugin-mendix",
     "test": "run-s test-serve test-build",
-    "test-serve": "vitest run -c playground/vitest.config.e2e.ts",
-    "test-build": "VITE_TEST_BUILD=1 vitest run -c playground/vitest.config.e2e.ts",
-    "debug-serve": "VITE_DEBUG_SERVE=1 vitest run -c playground/vitest.config.e2e.ts",
-    "debug-build": "VITE_TEST_BUILD=1 VITE_PRESERVE_BUILD_ARTIFACTS=1 vitest run -c playground/vitest.config.e2e.ts",
     "build": "pnpm -r --filter=\"@engalar/vite-plugin-mendix\" build",
     "dev": "pnpm -r --parallel --filter='./packages/*' run dev",
     "release": "tsx scripts/release.ts",
@@ -69,9 +65,6 @@
       "eslint --cache --fix"
     ],
     "packages/**/*.d.ts": [
-      "eslint --cache --fix"
-    ],
-    "playground/**/__tests__/**/*.ts": [
       "eslint --cache --fix"
     ]
   },
