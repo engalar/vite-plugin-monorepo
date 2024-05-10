@@ -13,8 +13,7 @@
   "files": [
     "dist",
     "main.js",
-    "dummy.js",
-    "mxui.js"
+    "dummy.js"
   ],
   "main": "./dist/index.cjs",
   "module": "./dist/index.mjs",
