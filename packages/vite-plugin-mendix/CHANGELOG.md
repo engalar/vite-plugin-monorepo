@@ -1,3 +1,5 @@
+## [1.2.1](https://github.com/engalar/vite-plugin-monorepo/compare/vite-plugin-mendix@1.2.0...vite-plugin-mendix@1.2.1) (2024-05-10)
+
 # [1.2.0](https://github.com/engalar/vite-plugin-monorepo/compare/vite-plugin-mendix@1.1.0...vite-plugin-mendix@1.2.0) (2024-05-09)
 
 ### Bug Fixes
