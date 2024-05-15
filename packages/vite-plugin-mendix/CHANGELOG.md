@@ -1,3 +1,9 @@
+## [1.2.2](https://github.com/engalar/vite-plugin-monorepo/compare/vite-plugin-mendix@1.2.1...vite-plugin-mendix@1.2.2) (2024-05-15)
+
+### Features
+
+- no need wat test project ([5a293c3](https://github.com/engalar/vite-plugin-monorepo/commit/5a293c3ad4fa66e78498b1cbec50ece64e99ac31))
+
 ## [1.2.1](https://github.com/engalar/vite-plugin-monorepo/compare/vite-plugin-mendix@1.2.0...vite-plugin-mendix@1.2.1) (2024-05-10)
 
 # [1.2.0](https://github.com/engalar/vite-plugin-monorepo/compare/vite-plugin-mendix@1.1.0...vite-plugin-mendix@1.2.0) (2024-05-09)
