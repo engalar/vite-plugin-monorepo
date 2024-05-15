@@ -5,6 +5,7 @@ import Inspect from 'vite-plugin-inspect'
 import { transformPackage } from '@mendix/pluggable-widgets-tools/dist/typings-generator'
 import path, { join } from 'path'
 import { fileURLToPath } from 'url'
+import { red } from 'ansi-colors'
 
 import type { ServerResponse } from 'http'
 import { updateZip } from './updateZip'
@@ -52,7 +53,7 @@ export default function (opts: Options): PluginOption {
         }
         return config
       },
-      load(id, options) {
+      load(id, _options) {
         if (id.startsWith('/src/main.js')) {
           return fs
             .readFileSync(currentDir + '/../main.js', {
@@ -62,15 +63,27 @@ export default function (opts: Options): PluginOption {
         }
       },
       async configureServer(server) {
-        const response = await fetch(
-          'http://localhost:8080/mxclientsystem/mxui/mxui.js',
-        )
-        if (!response.ok) {
-          throw new Error('Network response was not ok')
-        }
-        const bodyText = await response.text()
-        const patchedMxuiString = await babelPluginPatchMxui(bodyText)
+        let patchedMxuiString: string | null | undefined = null,
+          isOffline = false
         server.middlewares.use(async (req, res, next) => {
+          if (!patchedMxuiString) {
+            const response = await fetch(
+              'http://localhost:8080/mxclientsystem/mxui/mxui.js',
+            ).catch(() => null)
+            if (!response || !response.ok) {
+              if (!isOffline) {
+                logger.error(red('Please start the test project in Studio Pro'))
+                logger.error(red('请在 Studio Pro 中启动测试项目'))
+                isOffline = true
+              }
+              res.statusCode = 500
+              res.end('Failed to fetch mxui.js')
+              return
+            }
+            isOffline = false
+            const bodyText = await response.text()
+            patchedMxuiString = await babelPluginPatchMxui(bodyText)
+          }
           const url = req.url
           if (url?.startsWith('/test/mxclientsystem/mxui/mxui.js')) {
             serveFile(req, res, 'dummy.js')
@@ -172,7 +185,7 @@ export default function (opts: Options): PluginOption {
 }
 
 function serveFile(
-  req: Connect.IncomingMessage,
+  _req: Connect.IncomingMessage,
   res: ServerResponse,
   filePath: string,
 ): void {

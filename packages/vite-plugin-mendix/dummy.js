@@ -9,4 +9,6 @@ async function main() {
     await import("/src/main.js");
 }
 
+document.cookie = "originURI=/test/login.html" + (window.location.protocol === "https:" ? ";SameSite=None;Secure" : "");
+
 main();
