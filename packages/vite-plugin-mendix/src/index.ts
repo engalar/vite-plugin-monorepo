@@ -181,6 +181,21 @@ export default function (opts: Options): PluginOption {
         }
       },
     },
+    {
+      name: 'vite-plugin-internal-mendix',
+      enforce: 'pre',
+      resolveId(source) {
+        if (source.startsWith('mendix')) {
+          return '/__internal-mendix/' + source
+        }
+      },
+      load(id) {
+        if (id.startsWith('/__internal-mendix/')) {
+          return `const dep=window.__internal['${id.slice(19)}'];
+          export default dep;`
+        }
+      },
+    },
   ]
 }
 
