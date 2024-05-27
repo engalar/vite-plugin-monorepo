@@ -12,6 +12,53 @@ function patchMxui(babel: typeof Babel): PluginObj {
     name: 'transform-arrow-functions',
 
     visitor: {
+      AssignmentExpression(path) {
+        if (
+          t.isMemberExpression(path.node.left) &&
+          t.isIdentifier(path.node.left.property, { name: 'registerInDojo' }) &&
+          t.isFunctionExpression(path.node.right)
+        ) {
+          // Create the new statements
+          const internalInitStatement = t.expressionStatement(
+            t.assignmentExpression(
+              '=',
+              t.memberExpression(
+                t.identifier('window'),
+                t.identifier('__internal'),
+              ),
+              t.logicalExpression(
+                '||',
+                t.memberExpression(
+                  t.identifier('window'),
+                  t.identifier('__internal'),
+                ),
+                t.objectExpression([]),
+              ),
+            ),
+          )
+
+          const internalAssignmentStatement = t.expressionStatement(
+            t.assignmentExpression(
+              '=',
+              t.memberExpression(
+                t.memberExpression(
+                  t.identifier('window'),
+                  t.identifier('__internal'),
+                ),
+                t.identifier('e'),
+                true,
+              ),
+              t.identifier('t'),
+            ),
+          )
+          path.node.right.body.body.splice(
+            0,
+            0,
+            internalInitStatement,
+            internalAssignmentStatement,
+          )
+        }
+      },
       Program(path) {
         const comments =
           path.node.body && path.node.body.length > 0
