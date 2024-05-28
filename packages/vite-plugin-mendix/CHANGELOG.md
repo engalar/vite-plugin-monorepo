@@ -1,3 +1,11 @@
+## [1.2.3](https://github.com/engalar/vite-plugin-monorepo/compare/vite-plugin-mendix@1.2.2...vite-plugin-mendix@1.2.3) (2024-05-28)
+
+### Features
+
+- expose dep ([f501a10](https://github.com/engalar/vite-plugin-monorepo/commit/f501a10bd51eaafd6fc65382e991dafd3ada80e3))
+- for mx10 ([ab68772](https://github.com/engalar/vite-plugin-monorepo/commit/ab687723f217fb2f76ab5a521428d70ffbfa77bf))
+- proxy internal dep ([675f533](https://github.com/engalar/vite-plugin-monorepo/commit/675f533e8ae4d1513c6bff9d0a478655accc9706))
+
 ## [1.2.2](https://github.com/engalar/vite-plugin-monorepo/compare/vite-plugin-mendix@1.2.1...vite-plugin-mendix@1.2.2) (2024-05-15)
 
 ### Features

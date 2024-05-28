@@ -1,6 +1,6 @@
 {
   "name": "@engalar/vite-plugin-mendix",
-  "version": "1.2.2",
+  "version": "1.2.3",
   "dependencies": {
     "@babel/core": "^7.23.5",
     "@vitejs/plugin-react": "^4.2.1",
