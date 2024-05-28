@@ -40,13 +40,13 @@ export default function (opts: Options): PluginOption {
           ...config.server.proxy,
           ...{
             '/test': {
-              target: 'http://localhost:8080',
+              target: 'http://127.0.0.1:8080',
               changeOrigin: true,
               rewrite: (path) => path.replace(/^\/test/, ''),
             },
             '/test/mxdevtools/': {
               ws: true,
-              target: 'ws://localhost:8080',
+              target: 'ws://127.0.0.1:8080',
               rewrite: (path) => path.replace(/^\/test/, ''),
             },
           },
@@ -60,6 +60,7 @@ export default function (opts: Options): PluginOption {
               encoding: 'utf-8',
             })
             .replace('__WIDGET_NAME__', opts.widgetName)
+            .replace('__PACKAGE_PATH__', opts.widgetPackage)
         }
       },
       async configureServer(server) {
@@ -68,8 +69,11 @@ export default function (opts: Options): PluginOption {
         server.middlewares.use(async (req, res, next) => {
           if (!patchedMxuiString) {
             const response = await fetch(
-              'http://localhost:8080/mxclientsystem/mxui/mxui.js',
-            ).catch(() => null)
+              'http://127.0.0.1:8080/mxclientsystem/mxui/mxui.js',
+            ).catch((e) => {
+              console.error(e)
+              return null
+            })
             if (!response || !response.ok) {
               if (!isOffline) {
                 logger.error(red('Please start the test project in Studio Pro'))
@@ -185,11 +189,53 @@ export default function (opts: Options): PluginOption {
       name: 'vite-plugin-internal-mendix',
       enforce: 'pre',
       resolveId(source) {
-        if (source.startsWith('mendix')) {
+        if (
+          [
+            'mendix/components/web/Icon',
+            'mendix/filters/builders',
+            'mendix',
+          ].includes(source)
+        ) {
           return '/__internal-mendix/' + source
         }
       },
       load(id) {
+        if (id === '/__internal-mendix/mendix') {
+          return `
+          export {}
+          export const ValueStatus={
+    Available : "available",
+    Unavailable : "unavailable",
+    Loading : "loading"
+}
+          `
+        }
+        if (id === '/__internal-mendix/mendix/filters/builders') {
+          return `const dep=window.__internal['${id.slice(19)}'];
+        export const  and=dep.and;
+export const association=dep.association;
+export const attribute=dep.attribute;
+export const contains=dep.contains;
+export const dayEquals=dep.dayEquals;
+export const dayGreaterThan=dep.dayGreaterThan;
+export const dayGreaterThanOrEqual=dep.dayGreaterThanOrEqual;
+export const dayLessThan=dep.dayLessThan;
+export const dayLessThanOrEqual=dep.dayLessThanOrEqual;
+export const dayNotEqual=dep.dayNotEqual;
+export const empty=dep.empty;
+export const endsWith=dep.endsWith;
+export const equals=dep.equals;
+export const greaterThan=dep.greaterThan;
+export const greaterThanOrEqual=dep.greaterThanOrEqual;
+export const lessThan=dep.lessThan;
+export const lessThanOrEqual=dep.lessThanOrEqual;
+export const literal=dep.literal;
+export const not=dep.not;
+export const notEqual=dep.notEqual;
+export const or=dep.or;
+export const startsWith=dep.startsWith;
+`
+        }
         if (id.startsWith('/__internal-mendix/')) {
           return `const dep=window.__internal['${id.slice(19)}'];
           export default dep;`

@@ -28,9 +28,34 @@ Object.defineProperty(window, "mx", {
     configurable: true
 });
 
+let originalRequire;
+Object.defineProperty(window, "dojoDynamicRequire", {
+    get() {
+        return originalRequire;
+    },
+    set(newValue) {
+      originalRequire = function() {
+        const e = arguments[0];
+        // e is a string array
+        if(e.length === 1 &&typeof e[0] == 'string'){
+          const c = window.__internal[e[0]];
+          if(c){
+            arguments[1](c);
+            return;
+          }
+        }
+        newValue.apply(window,arguments);
+      };
+      originalRequire.baseUrl = newValue.baseUrl;
+      originalRequire.on = newValue.on;
+      originalRequire.cache = newValue.cache;
+    },
+    configurable: true
+});
+
 async function main() {
     await loadScript("mxui.js");
-    await loadWidget("__WIDGET_NAME__");
+    await loadWidget("__PACKAGE_PATH__","__WIDGET_NAME__");
     mx._startup();
 }
 main();
@@ -45,9 +70,11 @@ function loadScript(src) {
     });
 }
 
-async function loadWidget(widgetName) {
+async function loadWidget(packagePath,widgetName) {
     const modulePath = `http://localhost:5173/src/${widgetName}.tsx`;
     const widget = await import(/* @vite-ignore */ modulePath);
-    const path = `widgets/wengao/${widgetName.toLowerCase()}/${widgetName}`;
-    mendix.lang.registerInDojo(path, widget[widgetName]);
+    const path = `widgets/${packagePath}/${widgetName.toLowerCase()}/${widgetName}`;
+    mendix.lang.registerInDojo(path, widget);
+    // const path = `${packagePath}.${widgetName.toLowerCase()}.${widgetName}`;
+    // mxui.widget[path]=widget.default||widget;
 }
