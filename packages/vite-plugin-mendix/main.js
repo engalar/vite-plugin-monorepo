@@ -1,11 +1,11 @@
 import React from "react";
 import ReactDOM from "react-dom";
-import ReactDOMClient from "react-dom/client";
+// import ReactDOMClient from "react-dom/client";
 import ReactDOMScheduler from "scheduler";
 import RuntimeDev from "react/jsx-dev-runtime";
 import Runtime from "react/jsx-runtime";
 
-window.ReactFamily = { React, ReactDOM, Runtime, RuntimeDev, ReactDOMClient, ReactDOMScheduler };
+window.ReactFamily = { React, ReactDOM, Runtime, RuntimeDev, /* ReactDOMClient,  */ReactDOMScheduler };
 
 let originalMx;
 
@@ -73,7 +73,7 @@ function loadScript(src) {
 async function loadWidget(packagePath,widgetName) {
     const modulePath = `http://localhost:5173/src/${widgetName}.tsx`;
     const widget = await import(/* @vite-ignore */ modulePath);
-    const path = `widgets/${packagePath}/${widgetName.toLowerCase()}/${widgetName}`;
+    const path = `widgets/${packagePath.replaceAll('.','/')}/${widgetName.toLowerCase()}/${widgetName}`;
     mendix.lang.registerInDojo(path, widget);
     // const path = `${packagePath}.${widgetName.toLowerCase()}.${widgetName}`;
     // mxui.widget[path]=widget.default||widget;
