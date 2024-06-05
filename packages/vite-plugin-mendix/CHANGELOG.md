@@ -1,3 +1,9 @@
+## [1.3.1](https://github.com/engalar/vite-plugin-monorepo/compare/vite-plugin-mendix@1.3.0...vite-plugin-mendix@1.3.1) (2024-06-05)
+
+### Bug Fixes
+
+- project proxy ([85064d7](https://github.com/engalar/vite-plugin-monorepo/commit/85064d795df64a287156e4f9a5c655f7e5e6bf12))
+
 # [1.3.0](https://github.com/engalar/vite-plugin-monorepo/compare/vite-plugin-mendix@1.2.3...vite-plugin-mendix@1.3.0) (2024-06-05)
 
 ### Bug Fixes
