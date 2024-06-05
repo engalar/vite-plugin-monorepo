@@ -1,3 +1,10 @@
+# [1.3.0](https://github.com/engalar/vite-plugin-monorepo/compare/vite-plugin-mendix@1.2.3...vite-plugin-mendix@1.3.0) (2024-06-05)
+
+### Bug Fixes
+
+- babel mxui at 9.24 ([6b79ced](https://github.com/engalar/vite-plugin-monorepo/commit/6b79ceda518fe44c5a63d38090504d69c77ee024))
+- long package path ([451974d](https://github.com/engalar/vite-plugin-monorepo/commit/451974d016fbcd4b3a83dbe9c29d1deead40c7ec))
+
 ## [1.2.3](https://github.com/engalar/vite-plugin-monorepo/compare/vite-plugin-mendix@1.2.2...vite-plugin-mendix@1.2.3) (2024-05-28)
 
 ### Features
