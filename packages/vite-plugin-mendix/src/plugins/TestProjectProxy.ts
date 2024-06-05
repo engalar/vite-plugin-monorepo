@@ -12,7 +12,7 @@ import { red } from 'ansi-colors'
 import { babelPluginPatchMxui } from './util/babel'
 
 const __filename = fileURLToPath(import.meta.url)
-const currentDir = path.dirname(join(__filename, '..'))
+const pluginRoot = path.dirname(join(__filename, '..'))
 
 const logger = createLogger()
 // https://vitejs.dev/config/server-options#server-proxy
@@ -48,7 +48,7 @@ export function testProjectProxy(
     load(id, _options) {
       if (id.startsWith('/src/main.js')) {
         return fs
-          .readFileSync(currentDir + '/../main.js', {
+          .readFileSync(join(pluginRoot, 'main.js'), {
             encoding: 'utf-8',
           })
           .replace('__WIDGET_NAME__', widgetName)
@@ -116,7 +116,7 @@ function serveFile(
   res: ServerResponse,
   filePath: string,
 ): void {
-  filePath = currentDir + '/../' + filePath
+  filePath = join(pluginRoot, filePath)
   fs.readFile(filePath, (err, data) => {
     if (err) {
       // 发生错误时返回错误响应
