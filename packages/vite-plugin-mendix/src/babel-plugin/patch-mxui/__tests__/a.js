@@ -100,7 +100,53 @@ require(['dojo/sniff', 'dojo/_base/lang'], (e, t) =>
             t && t.call(n);
           })();
         };
-      }
+      },
+      4296: (e,t,n)=>{
+            n.r(t),
+            n.d(t, {
+                arrayFromObject: ()=>v,
+                capitalize: ()=>E,
+                clone: ()=>w,
+                collect: ()=>d,
+                curry: ()=>s,
+                curryN: ()=>c,
+                find: ()=>f,
+                findIndex: ()=>p,
+                findLast: ()=>h,
+                firstKey: ()=>S,
+                flatten: ()=>g,
+                forEach: ()=>a,
+                getFileError: ()=>j,
+                getUniqueId: ()=>O,
+                groupBy: ()=>b,
+                mapObject: ()=>o,
+                objectFromArray: ()=>y,
+                objectIsEmpty: ()=>_,
+                registerInDojo: ()=>k,
+                sequence: ()=>u,
+                toArray: ()=>m,
+                unique: ()=>C,
+                waitUntilPredicateHolds: ()=>x
+            });
+            var r = n(8157)
+              , i = 0;
+            function o(e, t) {
+                let n = arguments.length > 2 && void 0 !== arguments[2] ? arguments[2] : null;
+                return Object.keys(e).reduce((function(r, i) {
+                    return r[i] = t.call(n, e[i], i),
+                    r
+                }
+                ), {})
+            }
+            function k(e, t) {
+                window.dojoDynamicRequire.cache[e] = function() {
+                    window.define([], (function() {
+                        return t
+                    }
+                    ))
+                }
+            }
+        }
     },
     I = {};
   return 1;

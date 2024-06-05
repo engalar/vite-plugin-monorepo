@@ -13,13 +13,43 @@ function patchMxui(babel: typeof Babel): PluginObj {
 
     visitor: {
       AssignmentExpression(path) {
+        // 检查左侧是否匹配 window.dojoDynamicRequire.cache[e]
         if (
+          t.isFunctionExpression(path.node.right) &&
+          // e
           t.isMemberExpression(path.node.left) &&
-          t.isIdentifier(path.node.left.property, { name: 'registerInDojo' }) &&
-          t.isFunctionExpression(path.node.right)
+          path.node.left.property.type === 'Identifier' &&
+          path.node.left.property.name === 'e' &&
+          // cache
+          t.isMemberExpression(path.node.left.object) &&
+          path.node.left.object.property.type === 'Identifier' &&
+          path.node.left.object.property.name === 'cache' &&
+          // dojoDynamicRequire
+          t.isMemberExpression(path.node.left.object.object) &&
+          path.node.left.object.object.property.type === 'Identifier' &&
+          path.node.left.object.object.property.name === 'dojoDynamicRequire' &&
+          // window
+          t.isIdentifier(path.node.left.object.object.object) &&
+          path.node.left.object.object.object.name === 'window'
+
+          /* &&
+          t.isMemberExpression(path.node.left.object, {
+            type: 'MemberExpression',
+            property: { type: 'Identifier', name: 'cache' },
+            computed: false,
+          }) &&
+          t.isMemberExpression(path.node.left.object.object, {
+            type: 'MemberExpression',
+            property: { type: 'Identifier', name: 'dojoDynamicRequire' },
+            computed: false,
+          }) &&
+          t.isIdentifier(path.node.left.object.object.object, {
+            type: 'Identifier',
+            name: 'window',
+          }) */
         ) {
-          // Create the new statements
-          const internalInitStatement = t.expressionStatement(
+          // 插入 window.__internal = window.__internal || {};
+          const internalDeclaration = t.expressionStatement(
             t.assignmentExpression(
               '=',
               t.memberExpression(
@@ -37,7 +67,8 @@ function patchMxui(babel: typeof Babel): PluginObj {
             ),
           )
 
-          const internalAssignmentStatement = t.expressionStatement(
+          // 插入 window.__internal[e] = t;
+          const internalAssignment = t.expressionStatement(
             t.assignmentExpression(
               '=',
               t.memberExpression(
@@ -45,18 +76,16 @@ function patchMxui(babel: typeof Babel): PluginObj {
                   t.identifier('window'),
                   t.identifier('__internal'),
                 ),
-                t.identifier('e'),
+                path.node.left.property,
                 true,
               ),
-              t.identifier('t'),
+              path.scope.getBindingIdentifier('t'),
             ),
           )
-          path.node.right.body.body.splice(
-            0,
-            0,
-            internalInitStatement,
-            internalAssignmentStatement,
-          )
+
+          // 先插入内部变量声明
+          path.insertBefore(internalDeclaration)
+          path.insertBefore(internalAssignment)
         }
       },
       Program(path) {
