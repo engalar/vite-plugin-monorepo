@@ -6,6 +6,8 @@ import { LibInClientRuntime } from './plugins/LibInClientRuntime'
 import { testProjectProxy } from './plugins/TestProjectProxy'
 import { widgetAPI } from './plugins/WidgetAPI'
 
+export * from './ReactFamily'
+
 interface Options {
   widgetName: string
   testProject: string

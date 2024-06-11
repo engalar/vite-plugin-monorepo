@@ -1,4 +1,6 @@
-import "@engalar/vite-plugin-mendix/ReactFamily";
+import {ReactFamily} from "@engalar/vite-plugin-mendix/ReactFamily";
+
+window.ReactFamily = ReactFamily;
 
 let originalMx;
 
