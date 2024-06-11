@@ -30,6 +30,10 @@
     ".": {
       "import": "./dist/index.mjs",
       "require": "./dist/index.cjs"
+    },
+    "./ReactFamily": {
+      "import": "./dist/ReactFamily.mjs",
+      "require": "./dist/ReactFamily.cjs"
     }
   },
   "scripts": {
