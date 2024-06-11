@@ -1,3 +1,9 @@
+## [1.3.5](https://github.com/engalar/vite-plugin-monorepo/compare/vite-plugin-mendix@1.3.4...vite-plugin-mendix@1.3.5) (2024-06-11)
+
+### Bug Fixes
+
+- export issue ([ffbb075](https://github.com/engalar/vite-plugin-monorepo/commit/ffbb07548bc5bf061d97d3dae4601ab6ce5cc910))
+
 ## [1.3.4](https://github.com/engalar/vite-plugin-monorepo/compare/vite-plugin-mendix@1.3.3...vite-plugin-mendix@1.3.4) (2024-06-11)
 
 ### Bug Fixes
