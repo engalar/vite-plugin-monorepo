@@ -1,3 +1,9 @@
+## [1.3.3](https://github.com/engalar/vite-plugin-monorepo/compare/vite-plugin-mendix@1.3.1...vite-plugin-mendix@1.3.3) (2024-06-11)
+
+### Features
+
+- inplace react ([d0484cc](https://github.com/engalar/vite-plugin-monorepo/commit/d0484cc9679bf4639b6c26aee871e858fe1edb39))
+
 ## [1.3.1](https://github.com/engalar/vite-plugin-monorepo/compare/vite-plugin-mendix@1.3.0...vite-plugin-mendix@1.3.1) (2024-06-05)
 
 ### Bug Fixes
