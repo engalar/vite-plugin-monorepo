@@ -1,3 +1,9 @@
+## [1.3.6](https://github.com/engalar/vite-plugin-monorepo/compare/vite-plugin-mendix@1.3.5...vite-plugin-mendix@1.3.6) (2024-06-11)
+
+### Features
+
+- **vite-plugin-mendix:** Add support for React components in Mendix plugin and refine build configuration ([282271b](https://github.com/engalar/vite-plugin-monorepo/commit/282271b6c6deb83a1f56d2a7746afff15ce9a13b))
+
 ## [1.3.5](https://github.com/engalar/vite-plugin-monorepo/compare/vite-plugin-mendix@1.3.4...vite-plugin-mendix@1.3.5) (2024-06-11)
 
 ### Bug Fixes
