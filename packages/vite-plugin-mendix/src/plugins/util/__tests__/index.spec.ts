@@ -8,8 +8,11 @@ import { babelPluginPatchMxui, match } from '../babel'
 describe('babelPluginPatchMxui', () => {
   test('mxui lite.js', async () => {
     // read file content from file system ./lite.js
-    const a = await fs.readFile(path.resolve(__dirname, './a.js'), 'utf-8'),
-      b = await fs.readFile(path.resolve(__dirname, './b.js'), 'utf-8')
+    const a = await fs.readFile(
+        path.resolve(__dirname, './asset/a.js'),
+        'utf-8',
+      ),
+      b = await fs.readFile(path.resolve(__dirname, './asset/b.js'), 'utf-8')
 
     expect((await babelPluginPatchMxui(a)) + '\n').toEqual(b)
   })
