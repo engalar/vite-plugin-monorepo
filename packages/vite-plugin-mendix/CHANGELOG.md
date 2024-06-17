@@ -1,3 +1,9 @@
+# [1.4.0](https://github.com/engalar/vite-plugin-monorepo/compare/vite-plugin-mendix@1.3.6...vite-plugin-mendix@1.4.0) (2024-06-17)
+
+### Features
+
+- editorConfig and editorPreview build ([ef5faa4](https://github.com/engalar/vite-plugin-monorepo/commit/ef5faa4a4171ce1035b2d90466d90e0dc67b7414))
+
 ## [1.3.6](https://github.com/engalar/vite-plugin-monorepo/compare/vite-plugin-mendix@1.3.5...vite-plugin-mendix@1.3.6) (2024-06-11)
 
 ### Features
