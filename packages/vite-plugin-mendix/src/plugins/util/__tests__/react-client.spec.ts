@@ -25,6 +25,19 @@ describe('react-client', () => {
       (await babelPluginPatchPageChunk(a, ['WengaoFileUpload'])) + '\n',
     ).toEqual(b)
   })
+  test('commons chunk', async () => {
+    // read file content from file system ./common.js
+    const a = await fs.readFile(
+        path.resolve(__dirname, './asset/react-client/a.commons.js'),
+        'utf-8',
+      ),
+      b = await fs.readFile(
+        path.resolve(__dirname, './asset/react-client/b.commons.js'),
+        'utf-8',
+      )
+
+    expect(await babelPluginPatchCommonsChunk(a)).toEqual(b)
+  })
   test('index html', async () => {
     // read file content from file system ./index.html
     const a = await fs.readFile(

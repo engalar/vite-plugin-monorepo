@@ -1,3 +1,4 @@
+import vite_jsx_dev_runtime from "http://localhost:5173/node_modules/.vite/deps/react_jsx-dev-runtime.js";
 function _mergeNamespaces(n, m) {
 	m.forEach(function (e) {
 		e && typeof e !== 'string' && !Array.isArray(e) && Object.keys(e).forEach(function (k) {
@@ -10560,64 +10561,7 @@ if (true) {
         }
       }
     }
-    function jsxWithValidation(type, props, key, isStaticChildren, source, self) {
-      {
-        var validType = isValidElementType(type);
-        if (!validType) {
-          var info = "";
-          if (type === void 0 || typeof type === "object" && type !== null && Object.keys(type).length === 0) {
-            info += " You likely forgot to export your component from the file it's defined in, or you might have mixed up default and named imports.";
-          }
-          var sourceInfo = getSourceInfoErrorAddendum(source);
-          if (sourceInfo) {
-            info += sourceInfo;
-          } else {
-            info += getDeclarationErrorAddendum();
-          }
-          var typeString;
-          if (type === null) {
-            typeString = "null";
-          } else if (isArray(type)) {
-            typeString = "array";
-          } else if (type !== void 0 && type.$$typeof === REACT_ELEMENT_TYPE) {
-            typeString = "<" + (getComponentNameFromType(type.type) || "Unknown") + " />";
-            info = " Did you accidentally export a JSX literal instead of a component?";
-          } else {
-            typeString = typeof type;
-          }
-          error("React.jsx: type is invalid -- expected a string (for built-in components) or a class/function (for composite components) but got: %s.%s", typeString, info);
-        }
-        var element = jsxDEV(type, props, key, source, self);
-        if (element == null) {
-          return element;
-        }
-        if (validType) {
-          var children = props.children;
-          if (children !== void 0) {
-            if (isStaticChildren) {
-              if (isArray(children)) {
-                for (var i = 0; i < children.length; i++) {
-                  validateChildKeys(children[i], type);
-                }
-                if (Object.freeze) {
-                  Object.freeze(children);
-                }
-              } else {
-                error("React.jsx: Static children should always be an array. You are likely explicitly calling React.jsxs or React.jsxDEV. Use the Babel transform instead.");
-              }
-            } else {
-              validateChildKeys(children, type);
-            }
-          }
-        }
-        if (type === REACT_FRAGMENT_TYPE) {
-          validateFragmentProps(element);
-        } else {
-          validatePropTypes(element);
-        }
-        return element;
-      }
-    }
+    const jsxWithValidation = vite_jsx_dev_runtime.jsxDEV;
     function jsxWithValidationStatic(type, props, key) {
       {
         return jsxWithValidation(type, props, key, true);
@@ -48203,4 +48147,4 @@ var FileBackend$1 = /*#__PURE__*/Object.freeze({
 	FileBackend: FileBackend
 });
 
-export { ActionButton, ActionProperty, AssociationObjectListProperty, AssociationObjectProperty, AssociationProperty, AttributeProperty, Big, CheckBox, ConditionalVisibilityWrapper, Container, DataView$1 as DataView, DatabaseObjectListProperty, DerivedUniqueIdProperty, Div, DynamicFileProperty, ExpressionProperty, FileManager, FileUploadProperty, FormGroup, Fragment, IconProperty, Label, ListActionProperty, ListAssociationProperty, ListAttributeProperty, ListExpressionProperty, ListView, ListenObjectProperty, MicroflowObjectProperty, NavigationList, NavigationTree, PageFragment, Placeholder, PlaceholderProperty, ScrollContainer, SelectionProperty, SidebarToggle, StaticImageProperty, TabContainer, TemplatedWidgetProperty, Text, TextBox, TextProperty, ValidationProperty, WidgetVariableProperty, addEnumerations, and, asPluginWidgets, association, attribute, contains, e$1 as e, empty, endsWith, equals, getAugmentedNamespace, greaterThan, greaterThanOrEqual, lessThan, lessThanOrEqual, literal, notEqual, or, reactDomExports, reactExports, selectTranslation, startApp, startsWith, t, v };
+export { ActionButton, ActionProperty, AssociationObjectListProperty, AssociationObjectProperty, AssociationProperty, AttributeProperty, Big, CheckBox, ConditionalVisibilityWrapper, Container, DataView$1 as DataView, DatabaseObjectListProperty, DerivedUniqueIdProperty, Div, DynamicFileProperty, ExpressionProperty, FileManager, FileUploadProperty, FormGroup, Fragment, IconProperty, Label, ListActionProperty, ListAssociationProperty, ListAttributeProperty, ListExpressionProperty, ListView, ListenObjectProperty, MicroflowObjectProperty, NavigationList, NavigationTree, PageFragment, Placeholder, PlaceholderProperty, ScrollContainer, SelectionProperty, SidebarToggle, StaticImageProperty, TabContainer, TemplatedWidgetProperty, Text, TextBox, TextProperty, ValidationProperty, WidgetVariableProperty, addEnumerations, and, asPluginWidgets, association, attribute, contains, e$1 as e, empty, endsWith, equals, getAugmentedNamespace, greaterThan, greaterThanOrEqual, lessThan, lessThanOrEqual, literal, notEqual, or, reactDomExports, reactExports, selectTranslation, startApp, startsWith, t, v, jsxRuntimeExports };
