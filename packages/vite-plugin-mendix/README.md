@@ -14,7 +14,7 @@ package.json
 
 ````json
 scripts: {
-    "vite:start": "vite --config node_modules/@engalar/vite-plugin-mendix/config/vite.config.js",
+    "vite:start": "vite --config node_modules/@engalar/vite-plugin-mendix/config/_vite_config.js",
     "vite:build": "set __DEV_VITEJS__=true && npm run build",
     //...
 }

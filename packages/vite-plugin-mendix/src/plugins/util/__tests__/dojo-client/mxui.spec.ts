@@ -3,16 +3,19 @@ import path from 'path'
 // eslint-disable-next-line import/no-nodejs-modules
 import fs from 'fs/promises'
 import { describe, expect, test } from 'vitest'
-import { babelPluginPatchMxui, match } from '../babel'
+import { babelPluginPatchMxui, match } from '../../dojoClient'
 
 describe('babelPluginPatchMxui', () => {
   test('mxui lite.js', async () => {
     // read file content from file system ./lite.js
     const a = await fs.readFile(
-        path.resolve(__dirname, './asset/a.js'),
+        path.resolve(__dirname, '../asset/dojo-client/a.js'),
         'utf-8',
       ),
-      b = await fs.readFile(path.resolve(__dirname, './asset/b.js'), 'utf-8')
+      b = await fs.readFile(
+        path.resolve(__dirname, '../asset/dojo-client/b.js'),
+        'utf-8',
+      )
 
     expect((await babelPluginPatchMxui(a)) + '\n').toEqual(b)
   })

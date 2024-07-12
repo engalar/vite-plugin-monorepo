@@ -9,7 +9,7 @@ import type { ServerResponse } from 'http'
 import type { Connect, PluginOption } from 'vite'
 import { createLogger } from 'vite'
 import { red } from 'ansi-colors'
-import { babelPluginPatchMxui } from './util/babel'
+import { babelPluginPatchMxui } from './util/dojoClient'
 
 const __filename = fileURLToPath(import.meta.url)
 const pluginRoot = path.dirname(join(__filename, '..'))
