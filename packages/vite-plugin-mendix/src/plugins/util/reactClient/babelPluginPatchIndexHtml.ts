@@ -1,24 +1,19 @@
-import { transformAsync } from '@babel/core'
-import type { PluginObj } from '@babel/core'
-import type Babel from '@babel/core'
-
-// https://github.com/jamiebuilds/babel-handbook/blob/master/translations/en/plugin-handbook.md#toc-writing-your-first-babel-plugin
-
-// https://astexplorer.net/#/KJ8AjD6maa
-function patch(babel: typeof Babel): PluginObj {
-  const t = babel.types
-
-  return {
-    name: 'transform-arrow-functions',
-    visitor: {},
-  }
-}
-
 export async function babelPluginPatchIndexHtml(
   code: string,
 ): Promise<string | null | undefined> {
-  const result = await transformAsync(code, {
-    plugins: [patch],
-  })
-  return result?.code
+  if (code.includes('src="dist/index.js"')) {
+    // insert the following code after the opening <head> tag
+    code = code.replace(
+      /<head>/i,
+      `<head><script type="module">
+      import RefreshRuntime from 'http://localhost:5173/@react-refresh'
+      RefreshRuntime.injectIntoGlobalHook(window)
+      window.$RefreshReg$ = () => {}
+      window.$RefreshSig$ = () => (type) => type
+      window.__vite_plugin_react_preamble_installed__ = true
+    </script>
+    <script type="module" src="http://localhost:5173/@vite/client"></script>`,
+    )
+  }
+  return code
 }
