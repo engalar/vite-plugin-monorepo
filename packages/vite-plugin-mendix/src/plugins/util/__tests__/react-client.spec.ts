@@ -3,10 +3,14 @@ import path from 'path'
 // eslint-disable-next-line import/no-nodejs-modules
 import fs from 'fs/promises'
 import { describe, expect, test } from 'vitest'
-import { babelPluginPatchCommonsChunk } from '../reactClient'
+import {
+  babelPluginPatchCommonsChunk,
+  babelPluginPatchIndexHtml,
+  babelPluginPatchPageChunk,
+} from '../reactClient'
 
 describe('react-client', () => {
-  test('page', async () => {
+  test('page chunk', async () => {
     // read file content from file system ./lite.js
     const a = await fs.readFile(
         path.resolve(__dirname, './asset/react-client/a.Page.js'),
@@ -17,6 +21,8 @@ describe('react-client', () => {
         'utf-8',
       )
 
-    expect((await babelPluginPatchCommonsChunk(a)) + '\n').toEqual(b)
+    expect(
+      (await babelPluginPatchPageChunk(a, ['WengaoFileUpload'])) + '\n',
+    ).toEqual(b)
   })
 })
