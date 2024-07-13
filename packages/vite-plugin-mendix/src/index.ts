@@ -17,7 +17,7 @@ export default function (opts: Options): PluginOption {
   return [
     Inspect(),
     react(),
-    LibInClientRuntime,
+    opts.isReactClient ? null : LibInClientRuntime,
     widgetAPI(opts.widgetName, opts.testProject, opts.widgetPackage),
     testProjectProxy(opts.widgetName, opts.widgetPackage, opts.isReactClient),
   ]

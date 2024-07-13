@@ -15,7 +15,7 @@ import { getDojoMiddleware, loadDojoMain } from './dojo-client'
 import { getReactMiddleware } from './react-client'
 
 const __filename = fileURLToPath(import.meta.url)
-const pluginRoot = path.dirname(join(__filename, '../../..'))
+const pluginRoot = path.dirname(join(__filename, '..'))
 
 const logger = createLogger()
 // https://vitejs.dev/config/server-options#server-proxy
