@@ -38,14 +38,7 @@ export async function getReactMiddleware(
   ): void {
     const url = req.url
     if (url?.startsWith('/test/dist/commons.js')) {
-      serveFile(
-        req,
-        res,
-        join(
-          pluginRoot,
-          'src/plugins/util/__tests__/asset/react-client/b.commons.js',
-        ),
-      )
+      serveFile(req, res, join(pluginRoot, 'commons.js'))
       return
     }
     // url not end with .html, redirect to /test/index.html

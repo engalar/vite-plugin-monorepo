@@ -1,3 +1,14 @@
+# [2.0.0](https://github.com/engalar/vite-plugin-monorepo/compare/vite-plugin-mendix@1.4.0...vite-plugin-mendix@2.0.0) (2024-07-13)
+
+### Bug Fixes
+
+- react client fast refresh ([a84f1f3](https://github.com/engalar/vite-plugin-monorepo/commit/a84f1f32cc7c0a69c6b3bcd202934d97b0625743))
+
+### Features
+
+- **react-client:** patch index html ([276d8d4](https://github.com/engalar/vite-plugin-monorepo/commit/276d8d442ba6043d51129a86329bf3a7f40a62a6))
+- **react-client:** patch page ([c07d99c](https://github.com/engalar/vite-plugin-monorepo/commit/c07d99c96982ae34cf15b34fade2f7fa072dd5a4))
+
 # [1.4.0](https://github.com/engalar/vite-plugin-monorepo/compare/vite-plugin-mendix@1.3.6...vite-plugin-mendix@1.4.0) (2024-06-17)
 
 ### Features
