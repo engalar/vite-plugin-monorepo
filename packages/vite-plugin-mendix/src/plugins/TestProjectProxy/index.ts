@@ -51,8 +51,10 @@ export function testProjectProxy(
       return config
     },
     load(id, _options) {
-      if (id.startsWith('/src/main.js')) {
-        loadDojoMain(pluginRoot, widgetName, widgetPackage)
+      if (!isReactClient) {
+        if (id.startsWith('/src/main.js')) {
+          loadDojoMain(pluginRoot, widgetName, widgetPackage)
+        }
       }
     },
     async configureServer(server) {
@@ -63,7 +65,7 @@ export function testProjectProxy(
         }`
       })
       if (isReactClient) {
-        const reactMiddleware = await getReactMiddleware(pluginRoot)
+        const reactMiddleware = await getReactMiddleware(pluginRoot, widgetName)
         server.middlewares.use(reactMiddleware)
       } else {
         const dojoMiddleware = await getDojoMiddleware(pluginRoot)

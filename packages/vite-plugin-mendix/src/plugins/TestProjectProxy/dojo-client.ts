@@ -3,9 +3,10 @@ import fs from 'fs'
 // eslint-disable-next-line import/no-nodejs-modules
 import path, { join } from 'path'
 import type * as http from 'node:http'
-import type { Connect, PluginOption } from 'vite'
+import type { Connect } from 'vite'
 import { babelPluginPatchMxui } from '../util/dojoClient'
 import { serveFile } from './serveFile'
+import { patchRemoteFile } from './util'
 
 export function loadDojoMain(
   pluginRoot: string,
@@ -28,14 +29,10 @@ export async function getDojoMiddleware(
   // eslint-disable-next-line no-constant-condition
   while (true) {
     try {
-      const response = await fetch(
+      const patchString = await patchRemoteFile(
         'http://127.0.0.1:8080/mxclientsystem/mxui/mxui.js',
+        babelPluginPatchMxui,
       )
-      if (!response.ok) {
-        throw new Error('Failed to fetch mxui.js')
-      }
-      const bodyText = await response.text()
-      const patchString = await babelPluginPatchMxui(bodyText)
       patchedMxuiString = patchString!
       break
     } catch (e) {

@@ -3,34 +3,15 @@ import fs from 'fs'
 // eslint-disable-next-line import/no-nodejs-modules
 import path, { join } from 'path'
 import type * as http from 'node:http'
-import type { Connect, PluginOption } from 'vite'
-import { babelPluginPatchMxui } from '../util/dojoClient'
+import type { Connect } from 'vite'
+import { babelPluginPatchPageChunk } from '../util/reactClient'
 import { serveFile } from './serveFile'
+import { patchRemoteFile } from './util'
 
 export async function getReactMiddleware(
   pluginRoot: string,
+  widgetName: string,
 ): Promise<Connect.NextHandleFunction> {
-  let patchedMxuiString: string
-
-  // eslint-disable-next-line no-constant-condition
-  while (true) {
-    try {
-      const response = await fetch(
-        'http://127.0.0.1:8080/mxclientsystem/mxui/mxui.js',
-      )
-      if (!response.ok) {
-        throw new Error('Failed to fetch mxui.js')
-      }
-      const bodyText = await response.text()
-      const patchString = await babelPluginPatchMxui(bodyText)
-      patchedMxuiString = patchString!
-      break
-    } catch (e) {
-      console.error(e)
-      await new Promise((resolve) => setTimeout(resolve, 1000))
-    }
-  }
-
   return function (
     req: Connect.IncomingMessage,
     res: http.ServerResponse,
@@ -39,6 +20,19 @@ export async function getReactMiddleware(
     const url = req.url
     if (url?.startsWith('/test/dist/commons.js')) {
       serveFile(req, res, join(pluginRoot, 'commons.js'))
+      return
+    }
+    // dist/pages/*.js
+    if (url?.startsWith('/test/dist/pages/') && url.includes('.Page.js')) {
+      const patchFn = (code: string) =>
+        babelPluginPatchPageChunk(code, [widgetName])
+      patchRemoteFile(
+        url.replace(/^\/test/, 'http://localhost:8080'),
+        patchFn,
+      ).then((patchedCode) => {
+        res.writeHead(200, { 'Content-Type': 'text/javascript' })
+        res.end(patchedCode)
+      })
       return
     }
     // url not end with .html, redirect to /test/index.html

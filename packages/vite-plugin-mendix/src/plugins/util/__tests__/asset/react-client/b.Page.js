@@ -1,3 +1,4 @@
+import { WengaoFileUpload } from 'http://localhost:5173/src/WengaoFileUpload.tsx';
 // deployment\web\dist\pages\WengaoFileUpload.Page.js
 
 import { ComboboxWidgetModule } from '../Combobox.js';
