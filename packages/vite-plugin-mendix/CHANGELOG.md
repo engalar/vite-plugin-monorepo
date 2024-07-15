@@ -1,3 +1,11 @@
+## [2.0.2](https://github.com/engalar/vite-plugin-monorepo/compare/vite-plugin-mendix@2.0.1...vite-plugin-mendix@2.0.2) (2024-07-15)
+
+### Bug Fixes
+
+- commons export ([56fbf5d](https://github.com/engalar/vite-plugin-monorepo/commit/56fbf5d8a258ee9d154c1a8d6243cab18d065cdf))
+- file serve ([f94045a](https://github.com/engalar/vite-plugin-monorepo/commit/f94045a5ae6c90b4cb1d7f2f336257feff4e014d))
+- patch react page ([487df5d](https://github.com/engalar/vite-plugin-monorepo/commit/487df5d62706e0cc2ed6fd27bbaa22968f90f670))
+
 ## [2.0.1](https://github.com/engalar/vite-plugin-monorepo/compare/vite-plugin-mendix@2.0.0...vite-plugin-mendix@2.0.1) (2024-07-13)
 
 ### Bug Fixes
