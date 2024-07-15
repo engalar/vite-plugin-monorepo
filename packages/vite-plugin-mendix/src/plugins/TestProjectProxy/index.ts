@@ -46,6 +46,11 @@ export function testProjectProxy(
             target: 'ws://127.0.0.1:8080',
             rewrite: (path) => path.replace(/^\/test/, ''),
           },
+          '/test/file?guid=': {
+            target: 'http://127.0.0.1:8080',
+            changeOrigin: true,
+            rewrite: (path) => path.replace(/^\/test/, ''),
+          },
         },
       }
       return config
