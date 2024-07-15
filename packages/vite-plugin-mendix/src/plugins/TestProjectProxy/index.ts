@@ -12,7 +12,7 @@ import { red } from 'ansi-colors'
 import { babelPluginPatchMxui } from '../util/dojoClient'
 import { serveFile } from './serveFile'
 import { getDojoMiddleware, loadDojoMain } from './dojo-client'
-import { getReactMiddleware } from './react-client'
+import { getReactMiddleware, rewriteReactImports } from './react-client'
 
 const __filename = fileURLToPath(import.meta.url)
 const pluginRoot = path.dirname(join(__filename, '..'))
@@ -58,7 +58,7 @@ export function testProjectProxy(
     load(id, _options) {
       if (!isReactClient) {
         if (id.startsWith('/src/main.js')) {
-          loadDojoMain(pluginRoot, widgetName, widgetPackage)
+          return loadDojoMain(pluginRoot, widgetName, widgetPackage)
         }
       }
     },
@@ -78,5 +78,5 @@ export function testProjectProxy(
       }
     },
   }
-  return plugin
+  return [plugin, rewriteReactImports()]
 }

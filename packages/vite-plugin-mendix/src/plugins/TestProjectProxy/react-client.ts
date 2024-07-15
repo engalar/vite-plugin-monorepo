@@ -3,10 +3,14 @@ import fs from 'fs'
 // eslint-disable-next-line import/no-nodejs-modules
 import path, { join } from 'path'
 import type * as http from 'node:http'
-import type { Connect } from 'vite'
+import type { Connect, PluginOption } from 'vite'
+import { parse } from '@babel/parser'
+import generate from '@babel/generator'
+import traverse from '@babel/traverse'
+import * as t from '@babel/types'
 import { babelPluginPatchPageChunk } from '../util/reactClient'
-import { serveFile } from './serveFile'
 import { patchRemoteFile } from './util'
+import { serveFile } from './serveFile'
 
 export async function getReactMiddleware(
   pluginRoot: string,
@@ -49,5 +53,88 @@ export async function getReactMiddleware(
       return
     }
     next()
+  }
+}
+
+// https://astexplorer.net/#/KJ8AjD6maa
+// https://babeljs.io/repl
+// https://www.typescriptlang.org/play
+export function rewriteReactImports(): PluginOption {
+  let severUrl: string
+  return {
+    name: 'rewrite-react-imports',
+    // enforce: "pre",
+    transform(code: string, id: string) {
+      if (
+        id.endsWith('.js') ||
+        id.endsWith('.jsx') ||
+        id.endsWith('.ts') ||
+        id.endsWith('.tsx')
+      ) {
+        // 使用 Babel 解析器解析代码
+        const ast = parse(code, {
+          sourceType: 'module',
+          plugins: ['jsx', 'typescript'],
+        })
+
+        // 遍历 AST 并修改导入语句
+        traverse(ast, {
+          ImportDeclaration(path: any) {
+            if (path.node.source.value === 'big.js') {
+              path.replaceWith(
+                t.importDeclaration(
+                  [t.importSpecifier(t.identifier('Big'), t.identifier('Big'))],
+                  t.stringLiteral(`${severUrl}/test/dist/commons.js`),
+                ),
+              )
+            } else if (path.node.source.value === 'mendix') {
+              if (
+                path.node.specifiers.length === 1 &&
+                t.isImportSpecifier(path.node.specifiers[0])
+              ) {
+                path.replaceWith(
+                  t.variableDeclaration('const', [
+                    t.variableDeclarator(
+                      t.identifier('ValueStatus'),
+                      t.objectExpression([
+                        t.objectProperty(
+                          t.identifier('Available'),
+                          t.stringLiteral('available'),
+                        ),
+                        t.objectProperty(
+                          t.identifier('Unavailable'),
+                          t.stringLiteral('unavailable'),
+                        ),
+                        t.objectProperty(
+                          t.identifier('Loading'),
+                          t.stringLiteral('loading'),
+                        ),
+                      ]),
+                    ),
+                  ]),
+                )
+              }
+            } else {
+              // append severUrl to other imports
+              // path.node.source.value = `${severUrl}/${path.node.source.value}`;
+            }
+          },
+        })
+
+        // 使用 Babel 生成器生成新的代码
+        const output = generate(ast, { retainLines: true })
+        return {
+          code: output.code,
+          map: output.map,
+        }
+      }
+      return null
+    },
+    configureServer(server) {
+      server.httpServer?.once('listening', () => {
+        const address: any = server.httpServer?.address()
+        severUrl = `http://localhost:${address.port}`
+      })
+    },
   }
 }
