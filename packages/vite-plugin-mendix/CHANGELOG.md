@@ -1,3 +1,9 @@
+## [2.0.3](https://github.com/engalar/vite-plugin-monorepo/compare/vite-plugin-mendix@2.0.2...vite-plugin-mendix@2.0.3) (2024-07-16)
+
+### Bug Fixes
+
+- dojo client ([9acd6d6](https://github.com/engalar/vite-plugin-monorepo/commit/9acd6d6e62266a1719b3a48e6a5ea802e083760e))
+
 ## [2.0.2](https://github.com/engalar/vite-plugin-monorepo/compare/vite-plugin-mendix@2.0.1...vite-plugin-mendix@2.0.2) (2024-07-15)
 
 ### Bug Fixes
