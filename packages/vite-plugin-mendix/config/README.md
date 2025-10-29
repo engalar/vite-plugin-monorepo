@@ -1,10 +1,11 @@
 # Usage
 
 ## Step 1
-Copy all file into widget project root path except me.
 
+Copy all file in current folder into widget project root path except me.
 
 ## Step 2
+
 ```
 "vite:start": "vite",
 "vite:build": "set __DEV_VITEJS__=true && npm run build",

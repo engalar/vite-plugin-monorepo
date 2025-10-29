@@ -8,6 +8,18 @@ require(['dojo/sniff', 'dojo/_base/lang'], (e, t) =>
     var A,
       P,
       D = {
+        961: (e, t, n) => {
+            !function e() {
+                if ("undefined" != typeof __REACT_DEVTOOLS_GLOBAL_HOOK__ && "function" == typeof __REACT_DEVTOOLS_GLOBAL_HOOK__.checkDCE)
+                    try {
+                        __REACT_DEVTOOLS_GLOBAL_HOOK__.checkDCE(e)
+                    } catch (e) {
+                        console.error(e)
+                    }
+            }(),
+            e.exports = n(2551)
+        }
+        ,
         4448: (e, t, n) => {
           /**
            * @license React

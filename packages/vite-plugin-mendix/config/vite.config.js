@@ -14,7 +14,9 @@ export default defineConfig({
             widgetName: widgetPackageJson.widgetName,
             widgetPackage: widgetPackageJson.packagePath,
             testProject: widgetPackageJson.config.projectPath,
-            isReactClient: true,
+            // 是否使用React客户端，还是老的dojo
+            isReactClient: false,
+            // 组件开发语言是否为typescript
             isTs: false,
         }),
     ]

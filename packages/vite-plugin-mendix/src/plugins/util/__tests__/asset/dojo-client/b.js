@@ -8,6 +8,9 @@ require(['dojo/sniff', 'dojo/_base/lang'], (e, t) => (() => {
   var A,
     P,
     D = {
+      961: (e, t, n) => {
+        e.exports = n(2551);
+      },
       4448: (e, t, n) => {
         e.exports = ReactFamily.ReactDOM;
       },

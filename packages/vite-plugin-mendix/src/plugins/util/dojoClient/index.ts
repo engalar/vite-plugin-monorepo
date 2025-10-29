@@ -2,8 +2,10 @@ import type { PluginObj } from '@babel/core'
 import { transformAsync } from '@babel/core'
 import type Babel from '@babel/core'
 
+// 如何写插件
 // https://github.com/jamiebuilds/babel-handbook/blob/master/translations/en/plugin-handbook.md#toc-writing-your-first-babel-plugin
 
+// 可视化语法树，指导写代码
 // https://astexplorer.net/#/KJ8AjD6maa
 
 function patchMxui(babel: typeof Babel): PluginObj {
@@ -13,6 +15,36 @@ function patchMxui(babel: typeof Babel): PluginObj {
     name: 'transform-arrow-functions',
 
     visitor: {
+      SequenceExpression(path) {
+        // 安全检查：确保我们操作的是在一个 ExpressionStatement 内部的序列
+        if (!path.parentPath.isExpressionStatement()) {
+          return
+        }
+
+        const expressions = path.node.expressions
+        // 至少要有2个表达式才符合 A, B 的模式
+        if (expressions.length < 2) {
+          return
+        }
+
+        // 识别特征：第一个表达式是否是 DevTools 检查
+        // 我们通过遍历它的子节点来寻找 "__REACT_DEVTOOLS_GLOBAL_HOOK__"
+        const firstExprPath = path.get('expressions.0')
+        let isDevtoolsCheck = false
+        firstExprPath.traverse({
+          Identifier(innerPath) {
+            if (innerPath.node.name === '__REACT_DEVTOOLS_GLOBAL_HOOK__') {
+              isDevtoolsCheck = true
+              innerPath.stop() // 找到后立即停止，提高效率
+            }
+          },
+        })
+
+        // 如果确认是目标
+        if (isDevtoolsCheck) {
+          firstExprPath.remove()
+        }
+      },
       AssignmentExpression(path) {
         // 检查左侧是否匹配 window.dojoDynamicRequire.cache[e]
         if (
