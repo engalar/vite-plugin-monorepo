@@ -15,6 +15,7 @@ export default defineConfig({
             widgetPackage: widgetPackageJson.packagePath,
             testProject: widgetPackageJson.config.projectPath,
             isReactClient: true,
+            isTs: false,
         }),
     ]
 });

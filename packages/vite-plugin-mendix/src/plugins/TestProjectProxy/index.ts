@@ -24,6 +24,7 @@ export function testProjectProxy(
   widgetName: string,
   widgetPackage: string,
   isReactClient: boolean = false,
+  isTs: boolean = true,
 ): PluginOption {
   let severUrl
   const plugin: PluginOption = {
@@ -70,7 +71,7 @@ export function testProjectProxy(
         }`
       })
       if (isReactClient) {
-        const reactMiddleware = await getReactMiddleware(pluginRoot, widgetName)
+        const reactMiddleware = await getReactMiddleware(pluginRoot, widgetName, isTs)
         server.middlewares.use(reactMiddleware)
       } else {
         const dojoMiddleware = await getDojoMiddleware(pluginRoot)

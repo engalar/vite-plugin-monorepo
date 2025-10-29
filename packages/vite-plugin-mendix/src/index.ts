@@ -11,6 +11,7 @@ interface Options {
   testProject: string
   widgetPackage: string
   isReactClient: boolean
+  isTs: boolean
 }
 
 export default function (opts: Options): PluginOption {
@@ -19,6 +20,6 @@ export default function (opts: Options): PluginOption {
     react(),
     opts.isReactClient ? null : LibInClientRuntime,
     widgetAPI(opts.widgetName, opts.testProject, opts.widgetPackage),
-    testProjectProxy(opts.widgetName, opts.widgetPackage, opts.isReactClient),
+    testProjectProxy(opts.widgetName, opts.widgetPackage, opts.isReactClient, opts.isTs),
   ]
 }

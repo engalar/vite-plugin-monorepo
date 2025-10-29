@@ -7,7 +7,7 @@ import type Babel from '@babel/core'
 // https://astexplorer.net/#/KJ8AjD6maa
 function patch(
   babel: typeof Babel,
-  options: { widgetNames: string[] },
+  options: { widgetNames: string[], isTs: boolean },
 ): PluginObj {
   const t = babel.types
 
@@ -20,7 +20,7 @@ function patch(
         const sourceValue = node.source.value
         options.widgetNames.forEach((widgetName) => {
           if (sourceValue.includes(`../${widgetName}.js`)) {
-            const newCode = `import { ${widgetName} as ${widgetName}$1 } from 'http://localhost:5173/src/${widgetName}.tsx';
+            const newCode = `import { ${widgetName} as ${widgetName}$1 } from 'http://localhost:5173/src/${widgetName}.${options.isTs ? 'tsx' : 'jsx'}';
 var ${widgetName}WidgetModule = /*#__PURE__*/Object.freeze({
     __proto__: null,
     ${widgetName}: ${widgetName}$1
@@ -37,7 +37,7 @@ var ${widgetName}WidgetModule = /*#__PURE__*/Object.freeze({
         ) {
           const widgetName = path.node.declarations[0].id.name
           // insert new code at the top of the file
-          const newCode = `import { ${widgetName} } from 'http://localhost:5173/src/${widgetName}.tsx';`
+          const newCode = `import { ${widgetName} } from 'http://localhost:5173/src/${widgetName}.${options.isTs ? 'tsx' : 'jsx'}';`
           const result = babel.parseSync(newCode, { sourceType: 'module' })
           const programPath = path.findParent((e) => {
             return e.node.type === 'Program'
@@ -61,9 +61,10 @@ var ${widgetName}WidgetModule = /*#__PURE__*/Object.freeze({
 export async function babelPluginPatchPageChunk(
   code: string,
   widgetNames: string[],
+  isTs: boolean = true
 ): Promise<string | null | undefined> {
   const result = await transformAsync(code, {
-    plugins: [[patch, { widgetNames }]],
+    plugins: [[patch, { widgetNames, isTs }]],
   })
   return result?.code
 }

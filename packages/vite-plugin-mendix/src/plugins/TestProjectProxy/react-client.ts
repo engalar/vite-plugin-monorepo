@@ -15,6 +15,7 @@ import { serveFile } from './serveFile'
 export async function getReactMiddleware(
   pluginRoot: string,
   widgetName: string,
+  isTs: boolean = true
 ): Promise<Connect.NextHandleFunction> {
   return function (
     req: Connect.IncomingMessage,
@@ -29,7 +30,7 @@ export async function getReactMiddleware(
     // dist/pages/*.js
     if (url?.startsWith('/test/dist/pages/') && url.includes('.Page.js')) {
       const patchFn = (code: string) =>
-        babelPluginPatchPageChunk(code, [widgetName])
+        babelPluginPatchPageChunk(code, [widgetName], isTs)
       patchRemoteFile(
         url.replace(/^\/test/, 'http://localhost:8080'),
         patchFn,
