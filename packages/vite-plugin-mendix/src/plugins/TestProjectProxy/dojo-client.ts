@@ -12,12 +12,14 @@ export function loadDojoMain(
   pluginRoot: string,
   widgetName: string,
   widgetPackage: string,
+  isTs: boolean = true,
 ): string {
   return fs
     .readFileSync(join(pluginRoot, 'main.js'), {
       encoding: 'utf-8',
     })
     .replace('__WIDGET_NAME__', widgetName)
+    .replace('__WIDGET_EXT__', isTs ? 'tsx' : 'jsx')
     .replace('__PACKAGE_PATH__', widgetPackage)
 }
 

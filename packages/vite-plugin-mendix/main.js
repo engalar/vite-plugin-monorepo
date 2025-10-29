@@ -66,7 +66,7 @@ function loadScript(src) {
 }
 
 async function loadWidget(packagePath,widgetName) {
-    const modulePath = `http://localhost:5173/src/${widgetName}.tsx`;
+    const modulePath = `http://localhost:5173/src/${widgetName}.__WIDGET_EXT__`;
     const widget = await import(/* @vite-ignore */ modulePath);
     const path = `widgets/${packagePath.replaceAll('.','/')}/${widgetName.toLowerCase()}/${widgetName}`;
     mendix.lang.registerInDojo(path, widget);
