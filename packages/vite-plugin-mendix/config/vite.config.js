@@ -1,8 +1,17 @@
+/* eslint-disable no-undef */
+/* eslint-disable sort-imports */
+/* eslint-disable no-process-env */
 import { defineConfig } from "vite";
 import vitePluginMendix from "@engalar/vite-plugin-mendix";
 import { join } from "path";
+import * as dotenv from "dotenv";
+
+dotenv.config();
+
 const sourcePath = process.cwd();
 const widgetPackageJson = require(join(sourcePath, "package.json"));
+// 获取 testProject 的值，优先从 MX_PROJECT_PATH 环境变量中获取
+const testProject = process.env.MX_PROJECT_PATH || widgetPackageJson.config.projectPath;
 
 // https://vitejs.dev/config/
 export default defineConfig({
@@ -13,11 +22,9 @@ export default defineConfig({
         vitePluginMendix({
             widgetName: widgetPackageJson.widgetName,
             widgetPackage: widgetPackageJson.packagePath,
-            testProject: widgetPackageJson.config.projectPath,
-            // 是否使用React客户端，还是老的dojo
+            testProject: testProject,
             isReactClient: false,
-            // 组件开发语言是否为typescript
-            isTs: false,
-        }),
+            isTs: false
+        })
     ]
 });
