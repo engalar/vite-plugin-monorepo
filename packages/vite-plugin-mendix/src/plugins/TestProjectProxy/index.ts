@@ -83,5 +83,5 @@ export function testProjectProxy(
       }
     },
   }
-  return [plugin, rewriteReactImports()]
+  return [plugin, isReactClient ? rewriteReactImports() : null]
 }
